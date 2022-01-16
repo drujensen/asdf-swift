@@ -14,9 +14,12 @@ install_swift() {
   local minor
   case "$OSTYPE" in
     linux*) 
-      platform="ubuntu" 
-      major="20"
-      minor="04"
+      platform=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+      echo "platform: ${platform}"
+      minor=$(grep -oP '(?<=^VERSION_ID=\"..\.).+' /etc/os-release | tr -d '"')
+      echo "minor: ${minor}"
+      major=$(grep -oP '(?<=^VERSION_ID=\").+' /etc/os-release | tr -d ".${minor}\"")
+      echo "major: ${major}"
       ;;
     *) 
       fail "Unsupported platform" 
