@@ -29,9 +29,10 @@ install_swift() {
   local source_path="${tmp_dir}/swift.tar.gz"
 
  (
-    echo "∗ Downloading and installing Swift ${version} for ${platform} ${major}.${minor} @ ${download_url}"
+    echo "∗ Downloading and installing swift ${version} for ${platform} ${major}.${minor}"
     curl --silent --fail --location --create-dirs --output "$source_path" "$download_url" || fail "Could not download Swift $version for architecture $architecture"
-    tar zxf "$source_path" -C "$install_path" --strip-components=1
+    tar zxf "$source_path" -C "$tmp_dir" --strip-components=1
+    mv "${tmp_dir}/usr/*" "${install_path}"
     echo "The installation was successful!"
   ) || (
     rm -rf "$install_path"
