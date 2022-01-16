@@ -15,11 +15,8 @@ install_swift() {
   case "$OSTYPE" in
     linux*) 
       platform=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
-      echo "platform: ${platform}"
       minor=$(grep -oP '(?<=^VERSION_ID=\"..\.).+' /etc/os-release | tr -d '"')
-      echo "minor: ${minor}"
       major=$(grep -oP '(?<=^VERSION_ID=\").+' /etc/os-release | tr -d ".${minor}\"")
-      echo "major: ${major}"
       ;;
     *) 
       fail "Unsupported platform" 
@@ -35,7 +32,7 @@ install_swift() {
     echo "∗ Downloading and installing swift ${version} for ${platform} ${major}.${minor}"
     curl --silent --fail --location --create-dirs --output "$source_path" "$download_url" || fail "Could not download Swift $version for architecture $architecture"
     tar zxf "$source_path" -C "$tmp_dir" --strip-components=1
-    mv "${tmp_dir}/usr/*" "${install_path}"
+    mv "$tmp_dir/usr"/* "$install_path"
     echo "The installation was successful!"
   ) || (
     rm -rf "$install_path"
