@@ -4,19 +4,17 @@ install_swift() {
   local version="$1"
   local install_path="$2"
 
-#  while IFS='.' read -ra SEMVER; do
-#    major=${SEMVER[0]}
-#    minor=${SEMVER[1]}
-#  done <<< $(cat /etc/*-release)
-
   local platform
   local major
   local minor
   case "$OSTYPE" in
     linux*) 
       platform=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
-      minor=$(grep -oP '(?<=^VERSION_ID=\"..\.).+' /etc/os-release | tr -d '"')
-      major=$(grep -oP '(?<=^VERSION_ID=\").+' /etc/os-release | tr -d ".${minor}\"")
+      os_version=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
+      while IFS='.' read -ra SEMVER; do
+        major=${SEMVER[0]}
+        minor=${SEMVER[1]}
+      done <<<${os_version}
       ;;
     *) 
       fail "Unsupported platform" 
